@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.xml.crypto.Data;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @SpringBootTest
 class BinxApplicationTests {
@@ -42,13 +45,16 @@ class BinxApplicationTests {
     @Test
     void rabbit() {
         for (int i = 0; i < 10; i++) {
-            amqpTemplate.convertAndSend("fcm","fcm","fcm");
+            amqpTemplate.convertAndSend("fcm", "fcm", "fcm");
         }
     }
 
     @Test
     void date() {
-        System.out.println(DateUtil.parse("2024-04-01 00:00:00").getTime());
-        System.out.println(DateUtil.parse("2024-06-17 00:00:00").getTime());
+        Date date = new Date((1718968980000L));
+        System.out.println(DateUtil.format(date, DatePattern.NORM_DATETIME_PATTERN));
     }
+
+    
+
 }
