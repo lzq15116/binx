@@ -13,9 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.Date;
+import java.util.concurrent.*;
 
 @SpringBootTest
 public class RabbitMqTest {
@@ -39,6 +38,9 @@ public class RabbitMqTest {
         Thread.sleep(1000000);
     }
 
+    @Autowired
+    private Executor executor;
+
     @Test
     void sen2() throws InterruptedException {
 
@@ -48,17 +50,17 @@ public class RabbitMqTest {
 //                .setMessageId("123")
 //                .build();
 
-        Order order = new Order("2321", BigDecimal.valueOf(12));
+        Order order = new Order("2321", BigDecimal.valueOf(12), System.currentTimeMillis());
 
-        rabbitTemplate.convertAndSend(MqConstant.COIN_EXCHANGE, MqConstant.COIN_KEY, JSONObject.toJSONString(order), new MessagePostProcessor() {
-            @Override
-            public Message postProcessMessage(Message message) throws AmqpException {
-                MessageProperties messageProperties = message.getMessageProperties();
-                messageProperties.setAppId("2323232323");
+        for (int i = 0; i < 10; i++) {
 
-                return message;
-            }
-        });
+            executor.execute(() -> {
+                System.out.println(Thread.currentThread().getName());
+                rabbitTemplate.convertAndSend("orderExchange", "orderRoutingKey", JSONObject.toJSONString(order));
+            });
+        }
+
+
         Thread.sleep(1000000);
 
     }
