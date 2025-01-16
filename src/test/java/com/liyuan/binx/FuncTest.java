@@ -1,5 +1,6 @@
 package com.liyuan.binx;
 
+import cn.hutool.core.util.StrUtil;
 import com.liyuan.binx.service.biz.FuncServiceBiz;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,14 @@ public class FuncTest extends BinxApplicationTests{
         Optional<String> s = Optional.of("s");
         System.out.println(s);
 
+    }
+
+    @Test
+    void sda() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 300; i++) {
+            sb.append(i);
+        }
+        System.out.println(sb.toString());
     }
 }
